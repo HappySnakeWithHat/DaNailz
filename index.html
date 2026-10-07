@@ -104,6 +104,7 @@ label { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform:
 .sitghost .sheet { animation: breathe 3.6s ease-in-out infinite; transform-box: fill-box; transform-origin: 50% 100%; }
 .sitghost .tail { animation: sway 4.5s ease-in-out infinite; transform-box: fill-box; transform-origin: 0% 0%; }
 .blackcat .eyes { animation: blink 5s infinite; transform-box: fill-box; transform-origin: center; }
+.blackcat .tail { animation: sway 4.5s ease-in-out infinite; transform-box: fill-box; transform-origin: 0% 100%; }
 
 /* Calendar */
 .rule { display: flex; gap: 14px; align-items: center; padding: 12px 16px; border: 2px dashed var(--pumpkin); border-radius: 16px; background: #3a2630; }
@@ -113,7 +114,7 @@ label { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform:
 .chip { padding: 6px 12px; border-radius: 999px; background: var(--card); border: 1px solid var(--line); font-weight: 700; }
 .chip b { color: var(--ink); }
 .cal { padding-top: 26px; }
-.blackcat { position: absolute; top: -78px; right: 22px; width: 92px; }
+.blackcat { position: absolute; top: -88px; right: 22px; width: 92px; overflow: visible; }
 .weekdays, .grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
 .weekdays { margin-bottom: 8px; text-align: center; color: var(--mist); font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
 .day { position: relative; aspect-ratio: 1; padding: 8px 9px; background: var(--cell); color: var(--ghost); border: 1px solid var(--line); border-radius: 14px; font: 700 clamp(17px, 4vw, 26px)/1 var(--body); cursor: pointer; display: flex; align-items: flex-start; overflow: hidden; }
@@ -221,7 +222,7 @@ label { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform:
   .day { border-radius: 10px; padding: 5px 6px; }
   .count { top: 3px; right: 3px; min-width: 17px; height: 17px; line-height: 17px; font-size: 11px; }
   .ghostcat { width: 78px; }
-  .blackcat { width: 70px; top: -60px; }
+  .blackcat { width: 70px; top: -67px; }
   .loafcat { left: -6px; }
   .rule.has-ghost { margin-top: 44px; }
   .sitghost { width: 72px; top: -75px; right: -12px; }
@@ -250,16 +251,6 @@ label { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform:
     <path d="M60 62 Q58 90 55 114 M76 60 Q79 88 82 115 M47 70 Q43 92 40 113 M89 68 Q93 90 97 112" stroke="#c9c0e2" stroke-width="1.5" fill="none" stroke-linecap="round"/>
     <ellipse class="blink" cx="61" cy="46" rx="4.5" ry="6" fill="#17121f"/>
     <ellipse class="blink" cx="77" cy="46" rx="4.5" ry="6" fill="#17121f"/>
-  </symbol>
-  <!-- Black cat -->
-  <symbol id="blackcat" viewBox="0 0 100 100">
-    <path d="M70 92 Q96 90 92 66 Q90 52 80 56" stroke="#0b0810" stroke-width="7" fill="none" stroke-linecap="round"/>
-    <ellipse cx="50" cy="80" rx="26" ry="20" fill="#0b0810"/>
-    <circle cx="50" cy="46" r="20" fill="#0b0810"/>
-    <path d="M33 38 L30 16 L46 30 Z M67 38 L70 16 L54 30 Z" fill="#0b0810"/>
-    <path d="M34 34 L32 22 L42 31 Z M66 34 L68 22 L58 31 Z" fill="#3a2e54"/>
-    <ellipse class="blink" cx="42" cy="46" rx="4.5" ry="5.5" fill="#f6d743"/>
-    <ellipse class="blink" cx="58" cy="46" rx="4.5" ry="5.5" fill="#f6d743"/>
   </symbol>
   <!-- Paw stamp -->
   <symbol id="paw" viewBox="0 0 100 100">
@@ -348,20 +339,26 @@ label { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform:
       <div class="card cal has-cat">
         <!-- Black cat -->
         <svg class="blackcat" viewBox="0 0 100 100" aria-hidden="true">
-          <path d="M70 92 Q96 90 92 66 Q90 52 80 56" stroke="#0b0810" stroke-width="7" fill="none" stroke-linecap="round"/>
-          <ellipse cx="50" cy="80" rx="26" ry="20" fill="#0b0810"/>
-          <circle cx="50" cy="46" r="20" fill="#0b0810"/>
-          <path d="M33 38 L30 16 L46 30 Z M67 38 L70 16 L54 30 Z" fill="#0b0810"/>
-          <path d="M34 34 L32 22 L42 31 Z M66 34 L68 22 L58 31 Z" fill="#3a2e54"/>
-          <g class="eyes">
-            <ellipse cx="42" cy="46" rx="5" ry="5.5" fill="#f6d743"/>
-            <ellipse cx="58" cy="46" rx="5" ry="5.5" fill="#f6d743"/>
-            <ellipse cx="42" cy="46" rx="1.5" ry="4.2" fill="#0b0810"/>
-            <ellipse cx="58" cy="46" rx="1.5" ry="4.2" fill="#0b0810"/>
-            <circle cx="43.6" cy="44" r="1" fill="#fff"/>
-            <circle cx="59.6" cy="44" r="1" fill="#fff"/>
+          <g class="tail">
+            <path d="M64 93 C86 95 92 78 87 67 C84 60 77 61 79 67" stroke="#3a2e54" stroke-width="11" fill="none" stroke-linecap="round"/>
+            <path d="M64 93 C86 95 92 78 87 67 C84 60 77 61 79 67" stroke="#0b0810" stroke-width="7" fill="none" stroke-linecap="round"/>
           </g>
-          <path d="M48 54 L52 54 L50 56.5 Z" fill="#ff8a2b"/>
+          <path d="M27 97 C23 74 32 54 50 54 C68 54 77 74 73 97 Z" fill="#0b0810" stroke="#3a2e54" stroke-width="2"/>
+          <ellipse cx="42" cy="96" rx="6.5" ry="3.5" fill="#0b0810" stroke="#3a2e54" stroke-width="1.5"/>
+          <ellipse cx="58" cy="96" rx="6.5" ry="3.5" fill="#0b0810" stroke="#3a2e54" stroke-width="1.5"/>
+          <path d="M30 40 L28 15 L42 28 Q50 25 58 28 L72 15 L70 40 Q72 59 50 60 Q28 59 30 40 Z" fill="#0b0810" stroke="#3a2e54" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M31.5 32 L30.5 21 L38.5 28 Z M68.5 32 L69.5 21 L61.5 28 Z" fill="#3a2e54"/>
+          <g class="eyes">
+            <ellipse cx="41.5" cy="42" rx="5.5" ry="6" fill="#f6d743"/>
+            <ellipse cx="58.5" cy="42" rx="5.5" ry="6" fill="#f6d743"/>
+            <ellipse cx="41.5" cy="42.5" rx="3" ry="4.6" fill="#0b0810"/>
+            <ellipse cx="58.5" cy="42.5" rx="3" ry="4.6" fill="#0b0810"/>
+            <circle cx="43.2" cy="40.2" r="1.3" fill="#fff"/>
+            <circle cx="60.2" cy="40.2" r="1.3" fill="#fff"/>
+          </g>
+          <path d="M48 49 L52 49 L50 51.3 Z" fill="#ff8a2b"/>
+          <path d="M50 51.3 q-1.8 2.4 -3.8 1.2 M50 51.3 q1.8 2.4 3.8 1.2" stroke="#a99dc4" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+          <path d="M38 50 L28 48.5 M38 52.5 L28.5 54 M62 50 L72 48.5 M62 52.5 L71.5 54" stroke="#3a2e54" stroke-width="1" stroke-linecap="round"/>
         </svg>
         <div class="weekdays"><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div></div>
         <div class="grid" id="grid"></div>
@@ -1183,7 +1180,7 @@ async function drawStory() {
   roundRect(ctx, X, cardTop, R - X, cardBottom - cardTop, 22);
   ctx.fillStyle = "#221a2e"; ctx.fill();
   ctx.lineWidth = 1.5; ctx.strokeStyle = "#43365e"; ctx.stroke();
-  if (art.cat) ctx.drawImage(art.cat, R - 104, cardTop - 76, 80, 80);   // black cat
+  if (art.cat) ctx.drawImage(art.cat, R - 104, cardTop - 78, 80, 80);   // black cat
   if (art.loaf) {                                                       // sleeping cat
     const lx = X - 14, ly = cardTop - 64;
     ctx.drawImage(art.loaf, lx, ly, 120, 104);
