@@ -1067,10 +1067,12 @@ function loadStoryArt() {
     svgImage("0 0 120 130", $("sheetcat").innerHTML),
     svgImage("0 0 100 100", document.querySelector(".blackcat").innerHTML),
     svgImage("0 0 100 100", $("paw").innerHTML),
+    svgImage("0 0 120 170", document.querySelector(".sitghost").innerHTML),
+    svgImage("0 0 150 130", document.querySelector(".cal .loafcat").innerHTML.replace(/<text[\s\S]*?<\/text>/g, "")),
     document.fonts.load("60px Griffy").catch(() => {}),
     document.fonts.load("700 20px 'Shantell Sans'").catch(() => {}),
     document.fonts.load("20px 'Shantell Sans'").catch(() => {})
-  ]).then(([ghost, cat, paw]) => ({ ghost, cat, paw }));
+  ]).then(([ghost, cat, paw, sitGhost, loaf]) => ({ ghost, cat, paw, sitGhost, loaf }));
   return storyArt;
 }
 
@@ -1125,7 +1127,6 @@ async function drawStory() {
     { text: MONTH_NAME_LONG.slice(-3), font: `60px ${TITLE}`, color: ORANGE },
     { text: " " + YEAR, font: `60px ${TITLE}`, color: WHITE }
   ], X, 168, 460, 60);
-  if (art.ghost) ctx.drawImage(art.ghost, 428, 190, 90, 98);   // ghost cat
 
   // Location
   ctx.save();
@@ -1170,9 +1171,10 @@ async function drawStory() {
   ctx.strokeStyle = WHITE; ctx.lineCap = "round";
   ctx.beginPath(); ctx.moveTo(X + 34, cy - 8); ctx.lineTo(X + 34, cy); ctx.lineTo(X + 40, cy + 4); ctx.stroke();
   writeRuns(ctx, ruleRuns, textX, boxTop + 15 + 20, R - 16 - textX, 26);
+  if (art.sitGhost) ctx.drawImage(art.sitGhost, R + 16 - 96, boxTop - 100, 96, 136);   // ghost cat
 
   // Calendar
-  const cardTop = boxTop + boxH + 64;
+  const cardTop = boxTop + boxH + 76;
   const lead = weekday(workdays[0]) - 1, rows = Math.ceil((lead + workdays.length) / 5);
   const gap = 7, inX = X + 16, inW = R - X - 32, cellW = (inW - gap * 4) / 5;
   const gridTop = cardTop + 62;
@@ -1182,6 +1184,17 @@ async function drawStory() {
   ctx.fillStyle = "#221a2e"; ctx.fill();
   ctx.lineWidth = 1.5; ctx.strokeStyle = "#43365e"; ctx.stroke();
   if (art.cat) ctx.drawImage(art.cat, R - 104, cardTop - 76, 80, 80);   // black cat
+  if (art.loaf) {                                                       // sleeping cat
+    const lx = X - 14, ly = cardTop - 64;
+    ctx.drawImage(art.loaf, lx, ly, 120, 104);
+    ctx.fillStyle = "#a99dc4";
+    [[124, 44, 14, 1], [134, 28, 18, .8], [146, 10, 22, .6]].forEach(([zx, zy, size, alpha]) => {
+      ctx.globalAlpha = alpha;
+      ctx.font = `700 ${size}px ${BODY}`;
+      ctx.fillText(zx === 146 ? "Z" : "z", lx + zx * 0.8, ly + zy * 0.8 + size * 0.4);
+    });
+    ctx.globalAlpha = 1;
+  }
 
   ctx.font = `700 15px ${BODY}`;
   ctx.fillStyle = WHITE;
