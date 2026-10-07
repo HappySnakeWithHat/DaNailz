@@ -1,0 +1,1056 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>October Nail Bookings</title>
+
+<!-- Fonts -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Griffy&family=Shantell+Sans:wght@400;700&display=swap">
+
+<style>
+/* Colors & fonts */
+:root {
+  --night: #17121f;   /* background */
+  --side: #1c1626;    /* sidebar */
+  --card: #221a2e;    /* boxes */
+  --cell: #2c2340;    /* days & inputs */
+  --line: #43365e;    /* borders */
+  --ghost: #eeeaf7;   /* main text */
+  --mist: #a99dc4;    /* faded text */
+  --pumpkin: #ff8a2b; /* orange */
+  --ink: #ff5a36;     /* paw stamp */
+  --eyes: #f6d743;    /* yellow */
+  --display: "Griffy", Georgia, serif;
+  --body: "Shantell Sans", system-ui, sans-serif;
+  color-scheme: dark;
+}
+
+/* Page */
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: radial-gradient(circle at 88% 6%, rgba(246,215,67,.16), transparent 160px), var(--night);
+  color: var(--ghost);
+  font: 16px/1.5 var(--body);
+}
+.wrap { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 22px; }
+[hidden] { display: none !important; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+/* Sidebar */
+.app { display: grid; grid-template-columns: 220px minmax(0, 1fr); min-height: 100vh; }
+.side { position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; gap: 26px; padding: 24px 14px; background: var(--side); border-right: 1px solid var(--line); }
+.brand { display: flex; align-items: center; gap: 10px; padding-inline: 6px; }
+.brand svg { width: 44px; flex: none; }
+.brand b { display: block; font: 400 24px/1 var(--display); }
+.brand small { color: var(--mist); font-size: 12px; }
+.nav { display: flex; flex-direction: column; gap: 6px; }
+.nav button { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 12px; border: 1px solid transparent; background: none; color: var(--mist); font: 700 16px var(--body); cursor: pointer; }
+.nav button:hover { color: var(--ghost); background: var(--cell); }
+.nav button.on { color: var(--ghost); background: var(--cell); border-color: var(--line); }
+.nav button.on svg { color: var(--pumpkin); }
+.nav svg { width: 22px; height: 22px; flex: none; }
+.badge { margin-left: auto; padding: 0 8px; border-radius: 999px; background: var(--pumpkin); color: var(--night); font-size: 13px; }
+.side-foot { margin-top: auto; display: flex; flex-direction: column; gap: 8px; padding-inline: 6px; font-size: 13px; color: var(--mist); }
+.side-foot p { margin: 0 0 4px; }
+main { min-width: 0; padding: 28px 16px 72px; }
+
+/* Buttons & inputs */
+header { display: flex; align-items: flex-end; gap: 16px; }
+header > div { flex: 1; min-width: 0; }
+.eyebrow { margin: 0; color: var(--pumpkin); font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+h1 { margin: 4px 0 6px; font: 400 clamp(44px, 10vw, 72px)/.95 var(--display); }
+h1 span { color: var(--pumpkin); }
+h2 { margin: 0; font: 400 28px/1.1 var(--display); color: var(--pumpkin); }
+.sub { margin: 0; color: var(--mist); max-width: 46ch; }
+.card { position: relative; background: var(--card); border: 1px solid var(--line); border-radius: 22px; padding: 18px; }
+.btn { border: 0; border-radius: 999px; padding: 10px 20px; font: 700 16px var(--body); cursor: pointer; }
+.btn.main { background: var(--pumpkin); color: var(--night); }
+.btn.plain { background: none; color: var(--ghost); border: 1px solid var(--line); }
+.btn.small { padding: 6px 14px; font-size: 14px; }
+.link { border: 0; background: none; color: var(--mist); font: 700 14px var(--body); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; text-align: left; padding: 2px 0; }
+.link:hover { color: var(--ghost); }
+.link.danger { color: var(--ink); }
+button:focus-visible, input:focus, select:focus, textarea:focus { outline: 2px solid var(--pumpkin); outline-offset: 2px; }
+input, select, textarea { width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--cell); color: var(--ghost); font: 16px/1.4 var(--body); }
+textarea { resize: vertical; min-height: 64px; field-sizing: content; }
+label { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--mist); }
+
+/* Floating ghost cat */
+.ghostcat { width: 108px; flex: none; animation: bob 4s ease-in-out infinite; }
+@keyframes bob { 50% { transform: translateY(-10px) rotate(3deg); } }
+.blink { animation: blink 5s infinite; transform-box: fill-box; transform-origin: center; }
+@keyframes blink { 0%, 94%, 100% { transform: scaleY(1); } 96% { transform: scaleY(.1); } }
+
+/* Sleeping cat */
+.loafcat { position: absolute; left: -14px; top: -64px; width: 120px; pointer-events: none; overflow: visible; }
+.loafcat .body { animation: breathe 3.6s ease-in-out infinite; transform-box: fill-box; transform-origin: 50% 100%; }
+.loafcat .head { animation: nod 3.6s ease-in-out infinite; }
+.loafcat .tail { animation: sway 4.5s ease-in-out infinite; transform-box: fill-box; transform-origin: 100% 0%; }
+.loafcat .z { fill: var(--mist); font: 700 16px var(--body); opacity: 0; animation: snooze 3.6s ease-out infinite; }
+.loafcat .z2 { font-size: 20px; animation-delay: 1.2s; }
+.loafcat .z3 { font-size: 25px; animation-delay: 2.4s; }
+@keyframes breathe { 50% { transform: scale(1.03, 1.08); } }
+@keyframes nod { 50% { transform: translateY(-1.5px); } }
+@keyframes sway { 50% { transform: rotate(7deg); } }
+@keyframes snooze { 0% { opacity: 0; transform: translate(0, 0); } 20% { opacity: 1; } 100% { opacity: 0; transform: translate(16px, -34px); } }
+.has-cat { margin-top: 46px; }
+
+/* Sitting ghost cat */
+.rule { position: relative; }
+.rule.has-ghost { margin-top: 44px; }
+.sitghost { position: absolute; right: -16px; top: -100px; width: 96px; pointer-events: none; overflow: visible; }
+.sitghost .sheet { animation: breathe 3.6s ease-in-out infinite; transform-box: fill-box; transform-origin: 50% 100%; }
+.sitghost .tail { animation: sway 4.5s ease-in-out infinite; transform-box: fill-box; transform-origin: 0% 0%; }
+.blackcat .eyes { animation: blink 5s infinite; transform-box: fill-box; transform-origin: center; }
+
+/* Calendar */
+.rule { display: flex; gap: 14px; align-items: center; padding: 12px 16px; border: 2px dashed var(--pumpkin); border-radius: 16px; background: #3a2630; }
+.rule p { margin: 0; }
+.rule strong { color: var(--pumpkin); }
+.tally { display: flex; gap: 10px; }
+.chip { padding: 6px 12px; border-radius: 999px; background: var(--card); border: 1px solid var(--line); font-weight: 700; }
+.chip b { color: var(--ink); }
+.cal { padding-top: 26px; }
+.blackcat { position: absolute; top: -78px; right: 22px; width: 92px; }
+.weekdays, .grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+.weekdays { margin-bottom: 8px; text-align: center; color: var(--mist); font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+.day { position: relative; aspect-ratio: 1; padding: 8px 9px; background: var(--cell); color: var(--ghost); border: 1px solid var(--line); border-radius: 14px; font: 700 clamp(17px, 4vw, 26px)/1 var(--body); cursor: pointer; display: flex; align-items: flex-start; overflow: hidden; }
+.day:hover { border-color: var(--mist); }
+.day.past { color: var(--mist); }
+.day.today { border: 2px dashed var(--eyes); }
+.day.taken { background: #4a2a3a; border-color: #8a3d3d; }
+.day span { position: relative; z-index: 1; text-shadow: 0 0 6px var(--cell); }
+.stamp { position: absolute; right: 4px; bottom: 4px; width: 80%; max-width: 96px; opacity: .92; }
+.count { position: absolute; top: 6px; right: 6px; z-index: 2; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 999px; background: var(--ghost); color: var(--night); font-size: 12px; line-height: 20px; text-align: center; }
+.hint { margin: 14px 2px 0; font-size: 14px; color: var(--mist); }
+
+/* Clients */
+.form { display: flex; flex-direction: column; gap: 14px; }
+.fields { display: grid; grid-template-columns: 1.4fr 1fr .8fr; gap: 12px; }
+.field { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.field.wide { grid-column: 1 / -1; }
+.row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+.note { font-size: 14px; color: var(--mist); }
+.error { color: var(--ink); font-weight: 700; font-size: 14px; }
+.seg { display: inline-flex; padding: 3px; border-radius: 999px; background: var(--card); border: 1px solid var(--line); }
+.seg button { border: 0; background: none; color: var(--mist); font: 700 14px var(--body); padding: 6px 14px; border-radius: 999px; cursor: pointer; }
+.seg button.on { background: var(--cell); color: var(--ghost); }
+.list { display: flex; flex-direction: column; gap: 18px; }
+.dayblock h3 { display: flex; align-items: center; gap: 10px; margin: 0 0 8px 4px; font-size: 18px; }
+.dayblock.past { opacity: .62; }
+.pill { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; padding: 2px 8px; border-radius: 999px; background: var(--eyes); color: var(--night); }
+.clients { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.client { display: grid; grid-template-columns: 78px minmax(0, 1fr) auto; gap: 14px; align-items: start; padding: 14px 16px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; }
+.when { font-weight: 700; font-size: 22px; line-height: 1.1; }
+.when small { display: block; font-size: 13px; color: var(--mist); text-transform: uppercase; }
+.who { min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+.name { margin: 0; font-size: 19px; font-weight: 700; overflow-wrap: anywhere; }
+.svc { align-self: flex-start; font-size: 13px; font-weight: 700; padding: 2px 10px; border-radius: 999px; border: 1px solid var(--line); color: var(--pumpkin); }
+.notes { min-height: 44px; font-size: 15px; background: var(--night); }
+.acts { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; font-size: 14px; }
+.empty { display: flex; gap: 16px; align-items: center; padding: 22px; border: 2px dashed var(--line); border-radius: 18px; color: var(--mist); }
+.empty svg { width: 64px; flex: none; }
+.empty p { margin: 0; }
+
+/* About me */
+.about-top { display: grid; grid-template-columns: 210px minmax(0, 1fr); gap: 26px; align-items: center; }
+.portrait { aspect-ratio: 4 / 5; border-radius: 18px; overflow: hidden; background: var(--cell); border: 2px dashed var(--line); display: grid; place-items: center; text-align: center; color: var(--mist); font-size: 14px; padding: 0; transform: rotate(-2deg); box-shadow: 0 16px 40px rgba(0,0,0,.4); }
+.portrait.has { border: 6px solid var(--ghost); }
+.portrait img, .shot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.portrait svg { width: 70px; opacity: .6; }
+.about-top h1 { overflow-wrap: anywhere; }
+.handle { color: var(--pumpkin); font-weight: 700; }
+.story { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.story p { margin: 10px 0 0; white-space: pre-wrap; }
+.story .blank-text { color: var(--mist); font-style: italic; }
+.gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin-top: 12px; }
+.shot { position: relative; aspect-ratio: 1; border-radius: 14px; overflow: hidden; background: var(--cell); }
+.shot .link { position: absolute; right: 6px; bottom: 6px; background: var(--night); color: var(--ghost); padding: 4px 10px; border-radius: 999px; text-decoration: none; }
+.edit-box { display: flex; flex-direction: column; gap: 14px; }
+.edit-only { display: none; }
+.editing .edit-only { display: flex; }
+.editing .view-only { display: none; }
+
+/* Sync */
+.syncbtn { display: flex; align-items: center; gap: 8px; width: 100%; padding: 8px 10px; border-radius: 12px; border: 1px solid var(--line); background: none; color: var(--mist); font: 700 14px var(--body); cursor: pointer; text-align: left; }
+.syncbtn:hover { color: var(--ghost); }
+.syncbtn svg { width: 22px; height: 22px; flex: none; }
+.syncbtn[data-state="on"] svg { color: #7fd6a0; }
+.syncbtn[data-state="problem"] { border-color: var(--ink); }
+.syncbtn[data-state="problem"] svg { color: var(--ink); }
+.overlay { position: fixed; inset: 0; z-index: 30; display: grid; place-items: center; padding: 16px; background: rgba(10, 6, 16, .7); }
+.panel { width: min(460px, 100%); max-height: calc(100vh - 32px); overflow-y: auto; display: flex; flex-direction: column; gap: 14px; }
+.panel .note { margin: 0; }
+#syncStatus:empty { display: none; }
+.backup { border-top: 1px solid var(--line); padding-top: 14px; display: flex; flex-direction: column; gap: 8px; }
+.backup h3 { margin: 0; font-size: 16px; }
+
+/* Popup */
+.toast { position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%); z-index: 20; display: flex; gap: 12px; align-items: center; padding: 10px 14px; border-radius: 999px; background: var(--ghost); color: var(--night); font-weight: 700; max-width: calc(100% - 32px); }
+.toast button { border: 0; border-radius: 999px; padding: 4px 12px; background: var(--night); color: var(--ghost); font: inherit; cursor: pointer; }
+
+/* Phones */
+@media (max-width: 860px) {
+  .app { grid-template-columns: minmax(0, 1fr); }
+  .side { height: auto; z-index: 10; flex-direction: row; align-items: center; gap: 10px; padding: 10px 12px; border-right: 0; border-bottom: 1px solid var(--line); }
+  .brand { padding: 0; }
+  .brand svg { width: 34px; }
+  .brand div, #syncText { display: none; }
+  .side-foot { margin: 0; padding: 0; }
+  .syncbtn { width: auto; padding: 7px; }
+  .nav { flex-direction: row; flex: 1; }
+  .nav button { flex: 1; justify-content: center; gap: 6px; padding: 8px 6px; font-size: 14px; }
+  .badge { margin-left: 0; }
+}
+@media (max-width: 520px) {
+  .nav svg { display: none; }
+  .card { padding: 14px; }
+  .weekdays, .grid { gap: 5px; }
+  .day { border-radius: 10px; padding: 5px 6px; }
+  .count { top: 3px; right: 3px; min-width: 17px; height: 17px; line-height: 17px; font-size: 11px; }
+  .ghostcat { width: 78px; }
+  .blackcat { width: 70px; top: -60px; }
+  .loafcat { left: -6px; }
+  .rule.has-ghost { margin-top: 44px; }
+  .sitghost { width: 72px; top: -75px; right: -12px; }
+  .fields { grid-template-columns: 1fr 1fr; }
+  .fields .field:first-child { grid-column: 1 / -1; }
+  .client { grid-template-columns: 64px minmax(0, 1fr); padding: 12px; }
+  .acts { grid-column: 1 / -1; flex-direction: row; justify-content: flex-end; }
+  .about-top, .story { grid-template-columns: 1fr; }
+  .portrait { width: 70%; justify-self: center; }
+}
+@media (prefers-reduced-motion: reduce) { .ghostcat, .blink, .loafcat *, .sitghost *, .blackcat * { animation: none !important; } .loafcat .z { opacity: 1; } }
+</style>
+</head>
+
+<body>
+<!-- Drawings -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <!-- Ghost cat -->
+  <symbol id="sheetcat" viewBox="0 0 120 130">
+    <path d="M32 106 Q8 104 10 80 Q12 62 24 58" stroke="#3a2e54" stroke-width="12" fill="none" stroke-linecap="round"/>
+    <path d="M32 106 Q8 104 10 80 Q12 62 24 58" stroke="#0b0810" stroke-width="8" fill="none" stroke-linecap="round"/>
+    <ellipse cx="45" cy="119" rx="10" ry="6" fill="#0b0810" stroke="#3a2e54" stroke-width="2"/>
+    <ellipse cx="67" cy="120" rx="10" ry="6" fill="#0b0810" stroke="#3a2e54" stroke-width="2"/>
+    <ellipse cx="89" cy="118" rx="9" ry="6" fill="#0b0810" stroke="#3a2e54" stroke-width="2"/>
+    <path d="M44 40 L48 14 L60 30 Q67 27 75 30 L87 13 L89 42 Q95 58 97 76 Q100 96 105 114 Q97 110 91 116 Q83 110 75 117 Q65 111 57 116 Q47 110 39 115 Q31 111 25 114 Q30 92 34 74 Q38 56 44 40 Z" fill="#eeeaf7" stroke="#cfc6ea" stroke-width="1.5" stroke-linejoin="round"/>
+    <path d="M60 62 Q58 90 55 114 M76 60 Q79 88 82 115 M47 70 Q43 92 40 113 M89 68 Q93 90 97 112" stroke="#c9c0e2" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <ellipse class="blink" cx="61" cy="46" rx="4.5" ry="6" fill="#17121f"/>
+    <ellipse class="blink" cx="77" cy="46" rx="4.5" ry="6" fill="#17121f"/>
+  </symbol>
+  <!-- Black cat -->
+  <symbol id="blackcat" viewBox="0 0 100 100">
+    <path d="M70 92 Q96 90 92 66 Q90 52 80 56" stroke="#0b0810" stroke-width="7" fill="none" stroke-linecap="round"/>
+    <ellipse cx="50" cy="80" rx="26" ry="20" fill="#0b0810"/>
+    <circle cx="50" cy="46" r="20" fill="#0b0810"/>
+    <path d="M33 38 L30 16 L46 30 Z M67 38 L70 16 L54 30 Z" fill="#0b0810"/>
+    <path d="M34 34 L32 22 L42 31 Z M66 34 L68 22 L58 31 Z" fill="#3a2e54"/>
+    <ellipse class="blink" cx="42" cy="46" rx="4.5" ry="5.5" fill="#f6d743"/>
+    <ellipse class="blink" cx="58" cy="46" rx="4.5" ry="5.5" fill="#f6d743"/>
+  </symbol>
+  <!-- Paw stamp -->
+  <symbol id="paw" viewBox="0 0 100 100">
+    <circle cx="50" cy="50" r="44" fill="none" stroke="#ff5a36" stroke-width="5" stroke-dasharray="7 3"/>
+    <circle cx="50" cy="50" r="38" fill="none" stroke="#ff5a36" stroke-width="2"/>
+    <ellipse cx="50" cy="48" rx="12" ry="9.5" fill="#ff5a36"/>
+    <ellipse cx="35" cy="36" rx="4.8" ry="6" fill="#ff5a36"/>
+    <ellipse cx="44.5" cy="28" rx="4.8" ry="6" fill="#ff5a36"/>
+    <ellipse cx="55.5" cy="28" rx="4.8" ry="6" fill="#ff5a36"/>
+    <ellipse cx="65" cy="36" rx="4.8" ry="6" fill="#ff5a36"/>
+    <text x="50" y="75" text-anchor="middle" font-family="Shantell Sans, sans-serif" font-weight="700" font-size="14" fill="#ff5a36">TAKEN</text>
+  </symbol>
+</svg>
+
+<div class="app">
+
+  <!-- Sidebar -->
+  <aside class="side">
+    <div class="brand">
+      <svg viewBox="0 0 120 130" aria-hidden="true"><use href="#sheetcat"/></svg>
+      <div><b>Bookings</b><br><small>@sandiegos.nails</small></div>
+    </div>
+    <nav class="nav">
+      <button type="button" data-tab="calendar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+        Calendar
+      </button>
+      <button type="button" data-tab="clients">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5M16 4.8a3.5 3.5 0 0 1 0 6.4M18 14.8c1.8.8 3 2.5 3.5 5.2"/></svg>
+        Clients <span class="badge" id="todayBadge" title="Clients today" hidden></span>
+      </button>
+      <button type="button" data-tab="about">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 21s-7-4.5-9-9.5C1.6 7.8 4 4.5 7.3 4.5c2 0 3.6 1.1 4.7 2.8 1.1-1.7 2.7-2.8 4.7-2.8 3.3 0 5.7 3.3 4.3 7-2 5-9 9.5-9 9.5z"/></svg>
+        About me
+      </button>
+    </nav>
+    <!-- Sync button -->
+    <div class="side-foot">
+      <button type="button" class="syncbtn" id="openSync" data-state="off">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18h10.5a4 4 0 0 0 .6-7.95A6 6 0 0 0 6.6 9.2 4.5 4.5 0 0 0 7 18z"/><path d="M9.5 13.5l2 2 3.5-4"/></svg>
+        <span id="syncText">Sync is off</span>
+      </button>
+    </div>
+  </aside>
+
+  <main>
+    <!-- Calendar -->
+    <section class="wrap" id="tab-calendar">
+      <header>
+        <div>
+          <p class="eyebrow">Nail appointments</p>
+          <h1>Octo<span>ber</span> 2026</h1>
+          <p class="sub">Tap a day to stamp it. Tap a stamped day to clear it.</p>
+        </div>
+      </header>
+
+      <div class="rule has-ghost">
+        <!-- Ghost cat -->
+        <svg class="sitghost" viewBox="0 0 120 170" aria-hidden="true">
+          <g class="tail">
+            <path d="M88 118 C106 118 111 125 111 138 C111 151 106 158 109 166" stroke="#3a2e54" stroke-width="12" fill="none" stroke-linecap="round"/>
+            <path d="M88 118 C106 118 111 125 111 138 C111 151 106 158 109 166" stroke="#0b0810" stroke-width="8" fill="none" stroke-linecap="round"/>
+          </g>
+          <ellipse cx="43" cy="120" rx="10" ry="5" fill="#0b0810" stroke="#3a2e54" stroke-width="2"/>
+          <ellipse cx="64" cy="120" rx="10" ry="5" fill="#0b0810" stroke="#3a2e54" stroke-width="2"/>
+          <g class="sheet">
+            <path d="M44 40 L48 14 L60 30 Q67 27 75 30 L87 13 L89 42 Q95 58 97 76 Q100 96 103 114 Q95 110 89 116 Q81 110 73 117 Q63 111 55 116 Q45 110 37 115 Q30 111 25 114 Q30 92 34 74 Q38 56 44 40 Z" fill="#eeeaf7" stroke="#cfc6ea" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M60 62 Q58 90 55 114 M76 60 Q79 88 81 115 M47 70 Q43 92 40 113 M89 68 Q92 90 96 112" stroke="#c9c0e2" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            <ellipse class="blink" cx="61" cy="46" rx="4.5" ry="6" fill="#17121f"/>
+            <ellipse class="blink" cx="77" cy="46" rx="4.5" ry="6" fill="#17121f"/>
+          </g>
+        </svg>
+        <svg width="34" height="34" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="16" fill="none" stroke="#ff8a2b" stroke-width="3"/><path d="M20 10 V20 L27 24" stroke="#eeeaf7" stroke-width="3" fill="none" stroke-linecap="round"/></svg>
+        <p><strong>Gel/acrylics</strong> need to be booked at <b>8:45 am</b>.</p>
+      </div>
+
+      <div class="tally">
+        <span class="chip"><b id="takenCount">0</b> taken</span>
+        <span class="chip"><span id="openCount">0</span> open</span>
+      </div>
+
+      <div class="card cal has-cat">
+        <!-- Black cat -->
+        <svg class="blackcat" viewBox="0 0 100 100" aria-hidden="true">
+          <path d="M70 92 Q96 90 92 66 Q90 52 80 56" stroke="#0b0810" stroke-width="7" fill="none" stroke-linecap="round"/>
+          <ellipse cx="50" cy="80" rx="26" ry="20" fill="#0b0810"/>
+          <circle cx="50" cy="46" r="20" fill="#0b0810"/>
+          <path d="M33 38 L30 16 L46 30 Z M67 38 L70 16 L54 30 Z" fill="#0b0810"/>
+          <path d="M34 34 L32 22 L42 31 Z M66 34 L68 22 L58 31 Z" fill="#3a2e54"/>
+          <g class="eyes">
+            <ellipse cx="42" cy="46" rx="5" ry="5.5" fill="#f6d743"/>
+            <ellipse cx="58" cy="46" rx="5" ry="5.5" fill="#f6d743"/>
+            <ellipse cx="42" cy="46" rx="1.5" ry="4.2" fill="#0b0810"/>
+            <ellipse cx="58" cy="46" rx="1.5" ry="4.2" fill="#0b0810"/>
+            <circle cx="43.6" cy="44" r="1" fill="#fff"/>
+            <circle cx="59.6" cy="44" r="1" fill="#fff"/>
+          </g>
+          <path d="M48 54 L52 54 L50 56.5 Z" fill="#ff8a2b"/>
+        </svg>
+        <div class="weekdays"><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div></div>
+        <div class="grid" id="grid"></div>
+        <p class="hint">A paw stamp means that day is booked or unavailable. The white number shows how many clients you have that day.</p>
+      </div>
+    </section>
+
+    <!-- Clients -->
+    <section class="wrap" id="tab-clients" hidden>
+      <header>
+        <div>
+          <p class="eyebrow">Nail appointments</p>
+          <h1>Client <span>list</span></h1>
+          <p class="sub">Who's coming in, when, and anything to remember about their set.</p>
+        </div>
+        <svg class="ghostcat" viewBox="0 0 120 130" aria-hidden="true"><use href="#sheetcat"/></svg>
+      </header>
+
+      <!-- Client form -->
+      <form class="card form" id="clientForm" novalidate>
+        <h2 id="formTitle">Add a client</h2>
+        <div class="fields">
+          <div class="field"><label for="cName">Name</label><input id="cName" autocomplete="off" placeholder="Client's name"></div>
+          <div class="field"><label for="cDay">Day</label><select id="cDay"></select></div>
+          <div class="field"><label for="cTime">Time</label><input id="cTime" type="time" value="08:45" step="300"></div>
+          <div class="field wide"><label for="cService">Service</label>
+            <select id="cService">
+              <option value="">Not sure yet</option>
+              <option>Manicure</option><option>Pedicure</option>
+              <option>Acrylic full set</option><option>Gel full set</option>
+              <option>Acrylic fill</option><option>Gel fill</option>
+            </select>
+          </div>
+          <div class="field wide"><label for="cNotes">Notes</label><textarea id="cNotes" rows="2" placeholder="Shape, length, colors, add-ons, allergies…"></textarea></div>
+        </div>
+        <div class="row">
+          <button class="btn main" type="submit" id="saveBtn">Add client</button>
+          <button class="btn plain" type="button" id="cancelEdit" hidden>Cancel</button>
+          <span class="error" id="formError" role="alert"></span>
+          <span class="note" id="formNote">Adding a client also stamps that day on the calendar.</span>
+        </div>
+      </form>
+
+      <!-- Schedule -->
+      <div class="row">
+        <h2>Schedule</h2>
+        <div class="seg">
+          <button type="button" id="showUpcoming" class="on">Upcoming</button>
+          <button type="button" id="showAll">All October</button>
+        </div>
+      </div>
+      <div class="list" id="clientList"></div>
+    </section>
+
+    <!-- About me -->
+    <section class="wrap" id="tab-about" hidden>
+      <div class="row" style="justify-content: space-between">
+        <p class="eyebrow">About me</p>
+        <button type="button" class="btn plain small" id="editAbout">Edit page</button>
+      </div>
+      <div id="aboutBox"></div>
+      <input type="file" id="portraitFile" accept="image/*" hidden>
+      <input type="file" id="workFiles" accept="image/*" multiple hidden>
+    </section>
+  </main>
+</div>
+
+<!-- Sync settings -->
+<div class="overlay" id="syncPanel" hidden>
+  <form class="card panel" id="syncForm" novalidate>
+    <div class="row" style="justify-content: space-between">
+      <h2>Sync with GitHub</h2>
+      <button type="button" class="link" id="closeSync">Close</button>
+    </div>
+    <p class="note">Keeps your calendar, clients and About me the same on your phone and computer by saving them to your private GitHub repository. Enter the same details on each device.</p>
+    <div class="field"><label for="ghOwner">GitHub username</label><input id="ghOwner" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="your-username"></div>
+    <div class="field"><label for="ghRepo">Data repository</label><input id="ghRepo" autocomplete="off" autocapitalize="off" spellcheck="false" value="nail-bookings-data"></div>
+    <div class="field"><label for="ghToken">Access token</label><input id="ghToken" type="password" autocomplete="off" placeholder="github_pat_…"></div>
+    <div class="row">
+      <button class="btn main" type="submit" id="connectBtn">Connect</button>
+      <button class="btn plain" type="button" id="syncNow" hidden>Sync now</button>
+      <button class="link danger" type="button" id="disconnect" hidden>Turn off sync on this device</button>
+    </div>
+    <p class="note" id="syncStatus" role="status"></p>
+    <div class="backup">
+      <h3>Backup</h3>
+      <div class="row">
+        <button type="button" class="link" id="backupBtn">Download a backup</button>
+        <button type="button" class="link" id="restoreBtn">Restore from backup</button>
+      </div>
+      <input type="file" id="restoreFile" accept=".json,application/json" hidden>
+    </div>
+  </form>
+</div>
+
+<!-- Popup -->
+<div class="toast" id="toast" hidden>
+  <span id="toastMsg"></span>
+  <button type="button" id="undoBtn">Undo</button>
+</div>
+
+<script>
+// Settings
+const YEAR = 2026;
+const MONTH = 10;                              // 1–12
+const STARTING_TAKEN = [1, 2, 5, 9, 13, 23];   // starting stamps
+const DEFAULT_ABOUT = {
+  name: "Santiago",
+  tagline: "Nail tech in training at Evergreen Beauty College, Olympia. Graduating January 2027.",
+  outside: "When I'm not doing nails, I'm cooking on the line at the Rusty Tractor. I speak Spanish and English, so book in whichever you like!",
+  start: "",
+  photo: "",
+  work: []
+};
+
+// Helpers
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const pad = n => String(n).padStart(2, "0");
+const WEEKDAY = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const MONTH_NAME = new Date(YEAR, MONTH - 1).toLocaleString("en-US", { month: "short" });
+const weekday = d => new Date(YEAR, MONTH - 1, d).getDay();
+const keyOf = d => `${YEAR}-${pad(MONTH)}-${pad(d)}`;
+const dayOf = key => Number(key.slice(8, 10));
+const inMonth = key => key.startsWith(`${YEAR}-${pad(MONTH)}`);
+const label = d => `${WEEKDAY[weekday(d)]}, ${MONTH_NAME} ${d}`;
+const clock = date => date.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" }).toLowerCase();
+function time12(t) {
+  const [h, m] = (t || "").split(":").map(Number);
+  return isNaN(h) ? { t: "—", ap: "" } : { t: `${(h + 11) % 12 + 1}:${pad(m)}`, ap: h < 12 ? "am" : "pm" };
+}
+
+// Weekdays & today
+const daysInMonth = new Date(YEAR, MONTH, 0).getDate();
+const workdays = [];
+for (let d = 1; d <= daysInMonth; d++) if (weekday(d) !== 0 && weekday(d) !== 6) workdays.push(d);
+const now = new Date();
+const today = now.getFullYear() === YEAR && now.getMonth() === MONTH - 1 ? now.getDate() : null;
+const isPast = d => new Date(YEAR, MONTH - 1, d + 1) <= now;
+
+// Saving
+function load(key, fallback) {
+  try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; } catch { return fallback; }
+}
+function store(key, value) {
+  try { localStorage.setItem(key, JSON.stringify(value)); return true; }
+  catch { message("Couldn't save: this browser is out of space. Remove a photo or two."); return false; }
+}
+
+function firstData() {
+  // Old saves
+  const oldStamps = load(`nail-bookings-${YEAR}-${MONTH}`, null);
+  const oldClients = load("nail-clients", {});
+  const oldAbout = load("nail-about", null);
+  const t = oldStamps || oldAbout || Object.keys(oldClients).length ? 1 : 0;
+  const d = { stamps: {}, clients: {}, about: { ...(oldAbout || DEFAULT_ABOUT), t } };
+  for (const n of oldStamps || STARTING_TAKEN) d.stamps[keyOf(n)] = { on: true, t };
+  for (const [id, c] of Object.entries(oldClients)) d.clients[id] = { ...c, t };
+  return d;
+}
+let data = load("nail-data", null) || firstData();
+
+const isTaken = d => !!data.stamps[keyOf(d)]?.on;
+const activeClients = () => Object.fromEntries(Object.entries(data.clients).filter(([, c]) => !c.deleted));
+
+let edits = 0;
+function changed() {
+  edits++;
+  store("nail-unsynced", true);
+  scheduleSync();
+  return store("nail-data", data);
+}
+const setStamp = (d, on) => { data.stamps[keyOf(d)] = { on, t: Date.now() }; return changed(); };
+const putClient = (id, c) => { data.clients[id] = { ...c, t: Date.now() }; return changed(); };
+const removeClient = id => { data.clients[id] = { deleted: true, t: Date.now() }; return changed(); };
+const touchAbout = () => { data.about.t = Date.now(); return changed(); };
+
+// GitHub sync
+let gh = load("nail-github", null);
+let fileSha = null, syncTimer = null, syncing = false, syncAgain = false, lastSynced = null;
+
+const apiUrl = () => `https://api.github.com/repos/${gh.owner}/${gh.repo}/contents/data.json`;
+const ghHeaders = (accept = "application/vnd.github+json") =>
+  ({ Authorization: `Bearer ${gh.token}`, Accept: accept, "X-GitHub-Api-Version": "2022-11-28" });
+function toB64(text) {
+  const bytes = new TextEncoder().encode(text);
+  let bin = "";
+  for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+  return btoa(bin);
+}
+const fromB64 = b64 => new TextDecoder().decode(Uint8Array.from(atob(b64.replace(/\s/g, "")), c => c.charCodeAt(0)));
+
+async function pull() {                            // download
+  const r = await fetch(apiUrl(), { headers: ghHeaders(), cache: "no-store" });
+  if (r.status === 404) { fileSha = null; return null; }
+  if (!r.ok) throw r.status;
+  const meta = await r.json();
+  fileSha = meta.sha;
+  if (meta.content) return JSON.parse(fromB64(meta.content));
+  const raw = await fetch(apiUrl(), { headers: ghHeaders("application/vnd.github.raw+json"), cache: "no-store" });
+  if (!raw.ok) throw raw.status;
+  return raw.json();
+}
+
+async function push() {                            // upload
+  const body = { message: "Update bookings", content: toB64(JSON.stringify(data)) };
+  if (fileSha) body.sha = fileSha;
+  const r = await fetch(apiUrl(), { method: "PUT", headers: ghHeaders(), body: JSON.stringify(body) });
+  if (r.status === 409 || r.status === 422) return false;
+  if (!r.ok) throw r.status;
+  fileSha = (await r.json()).content.sha;
+  return true;
+}
+
+function newest(mine = {}, theirs = {}) {          // newest wins
+  const out = { ...mine };
+  for (const [k, v] of Object.entries(theirs)) if (!out[k] || (v.t || 0) >= (out[k].t || 0)) out[k] = v;
+  return out;
+}
+function merge(mine, theirs) {
+  return {
+    stamps: newest(mine.stamps, theirs.stamps),
+    clients: newest(mine.clients, theirs.clients),
+    about: theirs.about && (theirs.about.t || 0) >= (mine.about.t || 0) ? theirs.about : mine.about
+  };
+}
+
+async function sync() {
+  if (!gh) return;
+  if (syncing) { syncAgain = true; return; }
+  syncing = true;
+  showSync("Syncing…");
+  try {
+    for (let tries = 0; tries < 3; tries++) {
+      const remote = await pull();
+      if (remote) {
+        const before = JSON.stringify(data);
+        data = merge(data, remote);
+        store("nail-data", data);
+        if (JSON.stringify(data) !== before) redraw();
+      }
+      if (remote && !load("nail-unsynced", false)) break;
+      const sending = edits;
+      if (await push()) {
+        if (edits === sending) store("nail-unsynced", false);
+        break;
+      }
+    }
+    lastSynced = new Date();
+    showSync();
+  } catch (status) {
+    showSync(status === 401 ? "GitHub token isn't working. Check Sync settings."
+      : typeof status === "number" ? "Can't reach your data repository. Check Sync settings."
+      : "Offline. Changes are saved here and will sync later.", true);
+  }
+  syncing = false;
+  if (syncAgain) { syncAgain = false; sync(); }
+}
+function scheduleSync(delay = 2000) {
+  if (!gh) return;
+  clearTimeout(syncTimer);
+  syncTimer = setTimeout(sync, delay);
+}
+// Auto sync
+document.addEventListener("visibilitychange", () => { if (!document.hidden) sync(); });
+setInterval(() => { if (!document.hidden) sync(); }, 60000);
+
+// Sync status
+function showSync(text, problem = false) {
+  const t = text || (!gh ? "Sync is off" : lastSynced ? `Synced ${clock(lastSynced)}` : "Sync is on");
+  $("syncText").textContent = t;
+  $("syncStatus").textContent = gh || problem ? t : "";
+  $("openSync").dataset.state = problem ? "problem" : gh ? "on" : "off";
+  $("openSync").title = t;
+}
+
+// Sync settings
+const panel = $("syncPanel");
+function openPanel() {
+  $("ghOwner").value = gh?.owner || "";
+  $("ghRepo").value = gh?.repo || "nail-bookings-data";
+  $("ghToken").value = "";
+  $("ghToken").placeholder = gh ? "Saved on this device" : "github_pat_…";
+  $("connectBtn").textContent = gh ? "Save" : "Connect";
+  $("syncNow").hidden = $("disconnect").hidden = !gh;
+  showSync();
+  panel.hidden = false;
+  $("ghOwner").focus();
+}
+$("openSync").addEventListener("click", openPanel);
+$("closeSync").addEventListener("click", () => (panel.hidden = true));
+panel.addEventListener("click", e => { if (e.target === panel) panel.hidden = true; });
+$("syncNow").addEventListener("click", () => sync());
+$("disconnect").addEventListener("click", () => {
+  gh = null;
+  localStorage.removeItem("nail-github");
+  showSync();
+  openPanel();
+});
+
+$("syncForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  const owner = $("ghOwner").value.trim().replace(/^@/, "");
+  const repo = $("ghRepo").value.trim();
+  const token = $("ghToken").value.trim() || gh?.token;
+  if (!owner || !repo || !token) return showSync("Fill in your username, repository and token.", true);
+
+  showSync("Checking…");
+  try {
+    const r = await fetch(`https://api.github.com/repos/${owner}/${repo}`,
+      { headers: { Authorization: `Bearer ${token}`, "X-GitHub-Api-Version": "2022-11-28" }, cache: "no-store" });
+    if (r.status === 401) return showSync("That token isn't valid. Copy it again from GitHub.", true);
+    if (!r.ok) return showSync(`Can't find ${owner}/${repo}. Check the spelling, and that the token has access to it.`, true);
+  } catch {
+    return showSync("Can't reach GitHub. Check your internet connection.", true);
+  }
+  gh = { owner, repo, token };
+  store("nail-github", gh);
+  fileSha = null;
+  panel.hidden = true;
+  message("Sync is on");
+  sync();
+});
+
+// Sleeping cat
+const LOAF_CAT = `
+<svg class="loafcat" viewBox="0 0 150 130" aria-hidden="true">
+  <g class="tail">
+    <path d="M24 74 C8 74 4 88 7 100 C10 112 5 120 4 126" stroke="#3a2e54" stroke-width="11" fill="none" stroke-linecap="round"/>
+    <path d="M24 74 C8 74 4 88 7 100 C10 112 5 120 4 126" stroke="#0b0810" stroke-width="7" fill="none" stroke-linecap="round"/>
+  </g>
+  <g class="body">
+    <path d="M20 80 C20 52 40 44 66 44 C92 44 108 54 110 80 Z" fill="#0b0810" stroke="#3a2e54" stroke-width="2"/>
+    <ellipse cx="97" cy="79" rx="7" ry="3.5" fill="#0b0810" stroke="#3a2e54" stroke-width="1.5"/>
+  </g>
+  <g class="head">
+    <path d="M92 50 L90 31 L104 42 Z M111 42 L122 29 L123 49 Z" fill="#0b0810" stroke="#3a2e54" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M93 46 L92 36 L100 42 Z M114 42 L120 35 L120 46 Z" fill="#3a2e54"/>
+    <circle cx="107" cy="58" r="17" fill="#0b0810" stroke="#3a2e54" stroke-width="2"/>
+    <path d="M98 58 q4 4 8 0 M110 58 q4 4 8 0" stroke="#a99dc4" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <path d="M106 64 L110 64 L108 66.5 Z" fill="#ff8a2b"/>
+  </g>
+  <text class="z" x="122" y="40">z</text>
+  <text class="z z2" x="122" y="40">z</text>
+  <text class="z z3" x="122" y="40">Z</text>
+</svg>`;
+
+// Popup
+const toast = $("toast");
+let toastTimer, undoDay = null;
+function message(text, undo = false) {
+  $("toastMsg").textContent = text;
+  $("undoBtn").hidden = !undo;
+  toast.hidden = false;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => (toast.hidden = true), 5000);
+}
+
+// Tabs
+function showTab(name) {
+  if (!$("tab-" + name)) name = "calendar";
+  document.querySelectorAll("main > section").forEach(s => (s.hidden = s.id !== "tab-" + name));
+  document.querySelectorAll(".nav button").forEach(b => b.classList.toggle("on", b.dataset.tab === name));
+  history.replaceState(null, "", "#" + name);
+  window.scrollTo(0, 0);
+}
+document.querySelector(".nav").addEventListener("click", e => {
+  const b = e.target.closest("button");
+  if (b) showTab(b.dataset.tab);
+});
+
+// Calendar
+function clientCount() {
+  const counts = {};
+  for (const c of Object.values(activeClients())) if (inMonth(c.day)) counts[dayOf(c.day)] = (counts[dayOf(c.day)] || 0) + 1;
+  return counts;
+}
+
+function renderCalendar() {
+  const counts = clientCount();
+  let html = "<div></div>".repeat(weekday(workdays[0]) - 1);   // blank days
+  for (const d of workdays) {
+    const cls = ["day", isTaken(d) && "taken", d === today && "today", isPast(d) && "past"].filter(Boolean).join(" ");
+    const tilt = (d * 37) % 24 - 12;                                 // stamp tilt
+    html += `<button type="button" class="${cls}" data-day="${d}" aria-pressed="${isTaken(d)}">
+      <span>${d}</span>
+      ${counts[d] ? `<b class="count">${counts[d]}</b>` : ""}
+      ${isTaken(d) ? `<svg class="stamp" style="transform:rotate(${tilt}deg)" viewBox="0 0 100 100"><use href="#paw"/></svg>` : ""}
+    </button>`;
+  }
+  $("grid").innerHTML = html;
+  const n = workdays.filter(isTaken).length;
+  $("takenCount").textContent = n;
+  $("openCount").textContent = workdays.length - n;
+}
+
+$("grid").addEventListener("click", e => {
+  const btn = e.target.closest(".day");
+  if (!btn) return;
+  const d = Number(btn.dataset.day);
+  if (isTaken(d)) { setStamp(d, false); undoDay = d; message(`Cleared ${MONTH_NAME} ${d}`, true); }
+  else { setStamp(d, true); toast.hidden = true; }
+  renderCalendar();
+});
+
+$("undoBtn").addEventListener("click", () => {
+  if (undoDay === null) return;
+  setStamp(undoDay, true);
+  undoDay = null;
+  toast.hidden = true;
+  renderCalendar();
+});
+
+// Client form
+let editingId = null, showAll = false, confirmId = null;
+const form = $("clientForm");
+
+// Day dropdown
+const firstDay = workdays.find(d => !isPast(d)) ?? workdays[0];
+$("cDay").innerHTML = workdays.map(d =>
+  `<option value="${keyOf(d)}" ${d === firstDay ? "selected" : ""}>${label(d)}${d === today ? " (today)" : ""}</option>`).join("");
+
+function resetForm() {
+  editingId = null;
+  form.reset();
+  $("cDay").value = keyOf(firstDay);
+  $("cTime").value = "08:45";
+  $("formTitle").textContent = "Add a client";
+  $("saveBtn").textContent = "Add client";
+  $("cancelEdit").hidden = true;
+  $("formNote").hidden = false;
+  $("formError").textContent = "";
+}
+
+function startEdit(id) {
+  const c = data.clients[id];
+  editingId = id;
+  $("cName").value = c.name;
+  $("cDay").value = c.day;
+  $("cTime").value = c.time;
+  $("cService").value = c.service;
+  $("cNotes").value = c.notes;
+  $("formTitle").textContent = "Edit " + c.name;
+  $("saveBtn").textContent = "Save changes";
+  $("cancelEdit").hidden = false;
+  $("formNote").hidden = true;
+  form.scrollIntoView({ behavior: "smooth" });
+}
+
+form.addEventListener("submit", e => {
+  e.preventDefault();
+  const name = $("cName").value.trim();
+  if (!name) { $("formError").textContent = "Add the client's name."; return $("cName").focus(); }
+  if (!$("cTime").value) { $("formError").textContent = "Pick a time."; return $("cTime").focus(); }
+
+  const id = editingId || "c" + Date.now().toString(36);
+  const day = $("cDay").value;
+  putClient(id, { name, day, time: $("cTime").value, service: $("cService").value, notes: $("cNotes").value.trim() });
+  if (!isTaken(dayOf(day))) setStamp(dayOf(day), true);      // auto stamp
+
+  message(editingId ? `Saved changes for ${name}` : `Added ${name}`);
+  resetForm();
+  renderAll();
+});
+$("cancelEdit").addEventListener("click", resetForm);
+
+// Schedule
+function setShowAll(v) {
+  showAll = v;
+  $("showAll").classList.toggle("on", v);
+  $("showUpcoming").classList.toggle("on", !v);
+  renderClients();
+}
+$("showAll").addEventListener("click", () => setShowAll(true));
+$("showUpcoming").addEventListener("click", () => setShowAll(false));
+
+function renderClients() {
+  // Skip while typing
+  if (document.activeElement?.classList.contains("notes")) return;
+
+  const clients = activeClients();
+  const list = Object.entries(clients)
+    .map(([id, c]) => ({ id, ...c }))
+    .filter(c => inMonth(c.day) && (showAll || !isPast(dayOf(c.day))))
+    .sort((a, b) => (a.day + a.time).localeCompare(b.day + b.time));
+
+  if (!list.length) {
+    $("clientList").innerHTML = `<div class="empty"><svg viewBox="0 0 120 130"><use href="#sheetcat"/></svg><p>
+      ${showAll ? "<b>No clients yet.</b><br>Add your first one with the form above." : "<b>No upcoming clients.</b><br>Add one above, or tap All October to see past visits."}</p></div>`;
+  } else {
+    let html = "", current = "";
+    for (const c of list) {
+      const d = dayOf(c.day), t = time12(c.time);
+      if (c.day !== current) {                         // day heading
+        if (current) html += "</ul></div>";
+        current = c.day;
+        html += `<div class="dayblock ${isPast(d) ? "past" : ""}"><h3>${label(d)} ${d === today ? '<span class="pill">Today</span>' : ""}</h3><ul class="clients">`;
+      }
+      const actions = confirmId === c.id
+        ? `<span>Remove ${esc(c.name)}?</span>
+           <button type="button" class="link danger" data-act="yes" data-id="${c.id}">Yes, remove</button>
+           <button type="button" class="link" data-act="no">Keep</button>`
+        : `<button type="button" class="link" data-act="edit" data-id="${c.id}">Edit</button>
+           <button type="button" class="link" data-act="remove" data-id="${c.id}">Remove</button>`;
+      html += `<li class="client">
+        <div class="when">${t.t}<small>${t.ap}</small></div>
+        <div class="who">
+          <p class="name">${esc(c.name)}</p>
+          ${c.service ? `<span class="svc">${esc(c.service)}</span>` : ""}
+          <textarea class="notes" data-id="${c.id}" rows="1" aria-label="Notes for ${esc(c.name)}" placeholder="Add notes…">${esc(c.notes)}</textarea>
+        </div>
+        <div class="acts">${actions}</div>
+      </li>`;
+    }
+    $("clientList").innerHTML = html + "</ul></div>";
+  }
+
+  // Today badge
+  const n = Object.values(clients).filter(c => today && c.day === keyOf(today)).length;
+  $("todayBadge").hidden = !n;
+  $("todayBadge").textContent = n;
+}
+
+// Edit / remove
+$("clientList").addEventListener("click", e => {
+  const b = e.target.closest("button[data-act]");
+  if (!b) return;
+  const { act, id } = b.dataset;
+  if (act === "edit") startEdit(id);
+  if (act === "remove") confirmId = id;
+  if (act === "no") confirmId = null;
+  if (act === "yes") {
+    message(`Removed ${data.clients[id].name}`);
+    removeClient(id);
+    confirmId = null;
+    if (editingId === id) resetForm();
+  }
+  renderAll();
+});
+
+// Notes
+$("clientList").addEventListener("input", e => {
+  if (!e.target.classList.contains("notes")) return;
+  const id = e.target.dataset.id;
+  putClient(id, { ...data.clients[id], notes: e.target.value });
+});
+$("clientList").addEventListener("focusout", () => setTimeout(renderClients));
+
+// About me
+let editingAbout = false;
+
+function renderAbout() {
+  const a = data.about;
+  const box = $("aboutBox");
+  box.className = "wrap" + (editingAbout ? " editing" : "");
+  $("editAbout").textContent = editingAbout ? "Done" : "Edit page";
+
+  const para = (text, prompt) => text ? `<p>${esc(text)}</p>` : `<p class="blank-text">${prompt}</p>`;
+  box.innerHTML = `
+    <div class="about-top">
+      <button type="button" class="portrait ${a.photo ? "has" : ""}" id="portraitBtn" ${editingAbout ? "" : "disabled"} aria-label="Photo of me">
+        ${a.photo ? `<img src="${esc(a.photo)}" alt="Photo of ${esc(a.name)}">`
+                  : `<span><svg viewBox="0 0 120 130"><use href="#sheetcat"/></svg><br>${editingAbout ? "Tap to add your photo" : "Photo coming soon"}</span>`}
+      </button>
+      <div>
+        <h1 class="view-only">Hi, I'm <span>${esc(a.name)}</span></h1>
+        <p class="sub view-only">${esc(a.tagline)}</p>
+        <p class="handle view-only">@sandiegos.nails</p>
+        <div class="edit-box edit-only">
+          <div class="field"><label for="aName">Name</label><input id="aName" data-key="name" value="${esc(a.name)}"></div>
+          <div class="field"><label for="aTag">One line about you</label><textarea id="aTag" data-key="tagline" rows="2">${esc(a.tagline)}</textarea></div>
+          ${a.photo ? `<button type="button" class="link danger" data-about="removePhoto">Remove my photo</button>` : ""}
+        </div>
+      </div>
+    </div>
+
+    <div class="story">
+      <div class="card">
+        <h2>Life outside of nails</h2>
+        <div class="view-only">${para(a.outside, "Tap Edit page to write about your life outside of nails.")}</div>
+        <div class="edit-only field" style="margin-top:10px"><label for="aOut" class="sr">Life outside of nails</label><textarea id="aOut" data-key="outside" rows="5">${esc(a.outside)}</textarea></div>
+      </div>
+      <div class="card">
+        <h2>What got me into nails</h2>
+        <div class="view-only">${para(a.start, "Tap Edit page to share how you got started.")}</div>
+        <div class="edit-only field" style="margin-top:10px"><label for="aStart" class="sr">What got me into nails</label><textarea id="aStart" data-key="start" rows="5" placeholder="The first set you did, who inspired you, why you love it…">${esc(a.start)}</textarea></div>
+      </div>
+    </div>
+
+    <div class="card has-cat">
+      ${LOAF_CAT}
+      <div class="row" style="justify-content: space-between">
+        <h2>My work</h2>
+        <button type="button" class="btn main small edit-only" data-about="addWork">Add photos</button>
+      </div>
+      ${a.work.length
+        ? `<div class="gallery">${a.work.map((src, i) => `
+            <div class="shot"><img src="${esc(src)}" alt="Nail set ${i + 1}">
+              <button type="button" class="link edit-only" data-about="removeWork" data-i="${i}">Remove</button></div>`).join("")}</div>`
+        : `<p class="note">${editingAbout ? "Add photos of your sets to show them off here." : "Photos of my sets are coming soon."}</p>`}
+    </div>`;
+}
+
+$("editAbout").addEventListener("click", () => { editingAbout = !editingAbout; renderAbout(); });
+
+// About fields
+$("aboutBox").addEventListener("input", e => {
+  const key = e.target.dataset.key;
+  if (key) { data.about[key] = e.target.value; touchAbout(); }
+});
+
+// Photos
+$("aboutBox").addEventListener("click", e => {
+  if (e.target.closest("#portraitBtn")) return $("portraitFile").click();
+  const b = e.target.closest("[data-about]");
+  if (!b) return;
+  if (b.dataset.about === "addWork") $("workFiles").click();
+  if (b.dataset.about === "removePhoto") { data.about.photo = ""; touchAbout(); renderAbout(); }
+  if (b.dataset.about === "removeWork") { data.about.work.splice(Number(b.dataset.i), 1); touchAbout(); renderAbout(); }
+});
+
+// Shrink photos
+function shrinkPhoto(file, maxSize = 900) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      const scale = Math.min(1, maxSize / Math.max(img.width, img.height));
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.round(img.width * scale);
+      canvas.height = Math.round(img.height * scale);
+      canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
+      URL.revokeObjectURL(img.src);
+      resolve(canvas.toDataURL("image/jpeg", 0.8));
+    };
+    img.onerror = () => reject();
+    img.src = URL.createObjectURL(file);
+  });
+}
+
+$("portraitFile").addEventListener("change", async e => {
+  const file = e.target.files[0];
+  e.target.value = "";
+  if (!file) return;
+  try { data.about.photo = await shrinkPhoto(file, 700); }
+  catch { return message("Couldn't open that photo. Try a JPG or PNG."); }
+  if (!touchAbout()) data.about.photo = "";
+  renderAbout();
+});
+
+$("workFiles").addEventListener("change", async e => {
+  const files = [...e.target.files];
+  e.target.value = "";
+  for (const file of files) {
+    try { data.about.work.push(await shrinkPhoto(file)); }
+    catch { message("Couldn't open one of those photos. Try a JPG or PNG."); continue; }
+    if (!touchAbout()) { data.about.work.pop(); break; }
+  }
+  renderAbout();
+});
+
+// Backup
+$("backupBtn").addEventListener("click", () => {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(data)], { type: "application/json" }));
+  a.download = `nail-bookings-backup-${new Date().toISOString().slice(0, 10)}.json`;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+});
+
+$("restoreBtn").addEventListener("click", () => $("restoreFile").click());
+$("restoreFile").addEventListener("change", async e => {
+  const file = e.target.files[0];
+  e.target.value = "";
+  if (!file) return;
+  try {
+    let d = JSON.parse(await file.text());
+    if (Array.isArray(d.stamps)) {                 // old backup
+      const stamps = {};
+      d.stamps.forEach(n => (stamps[keyOf(n)] = { on: true }));
+      d = { stamps, clients: d.clients || {}, about: d.about || DEFAULT_ABOUT };
+    }
+    const t = Date.now();
+    for (const v of [...Object.values(d.stamps), ...Object.values(d.clients), d.about]) v.t = t;
+    data = d;
+    changed();
+    redraw();
+    panel.hidden = true;
+    message("Backup restored");
+  } catch {
+    message("That file isn't a bookings backup.");
+  }
+});
+
+// Start
+function renderAll() { renderCalendar(); renderClients(); }
+function redraw() { renderAll(); if (!editingAbout) renderAbout(); }
+document.querySelector(".cal").insertAdjacentHTML("afterbegin", LOAF_CAT);
+store("nail-data", data);
+renderAll();
+renderAbout();
+showTab(location.hash.slice(1));
+showSync();
+sync();
+</script>
+</body>
+</html>
