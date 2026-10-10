@@ -20,6 +20,7 @@
   --mist: #a99dc4;    /* faded text */
   --pumpkin: #ff8a2b; /* orange */
   --ink: #ff5a36;     /* paw stamp */
+  --mani: #c792ff;    /* mani/pedi stamp */
   --eyes: #f6d743;    /* yellow */
   --display: "Griffy", Georgia, serif;
   --body: "Shantell Sans", system-ui, sans-serif;
@@ -122,6 +123,8 @@ label { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform:
 .day.past { color: var(--mist); }
 .day.today { border: 2px dashed var(--eyes); }
 .day.taken { background: #4a2a3a; border-color: #8a3d3d; }
+.day.mani { background: #352850; border-color: #7a5aa8; }
+.chip b.mani { color: var(--mani); }
 .day span { position: relative; z-index: 1; text-shadow: 0 0 6px var(--cell); }
 .stamp { position: absolute; right: 4px; bottom: 4px; width: 80%; max-width: 96px; opacity: .92; }
 .count { position: absolute; top: 6px; right: 6px; z-index: 2; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 999px; background: var(--ghost); color: var(--night); font-size: 12px; line-height: 20px; text-align: center; }
@@ -263,6 +266,17 @@ label { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform:
     <ellipse cx="65" cy="36" rx="4.8" ry="6" fill="#ff5a36"/>
     <text x="50" y="75" text-anchor="middle" font-family="Shantell Sans, sans-serif" font-weight="700" font-size="14" fill="#ff5a36">TAKEN</text>
   </symbol>
+  <!-- Mani/pedi stamp -->
+  <symbol id="paw-mani" viewBox="0 0 100 100">
+    <circle cx="50" cy="50" r="44" fill="none" stroke="#c792ff" stroke-width="5" stroke-dasharray="7 3"/>
+    <circle cx="50" cy="50" r="38" fill="none" stroke="#c792ff" stroke-width="2"/>
+    <ellipse cx="50" cy="48" rx="12" ry="9.5" fill="#c792ff"/>
+    <ellipse cx="35" cy="36" rx="4.8" ry="6" fill="#c792ff"/>
+    <ellipse cx="44.5" cy="28" rx="4.8" ry="6" fill="#c792ff"/>
+    <ellipse cx="55.5" cy="28" rx="4.8" ry="6" fill="#c792ff"/>
+    <ellipse cx="65" cy="36" rx="4.8" ry="6" fill="#c792ff"/>
+    <text x="50" y="74" text-anchor="middle" font-family="Shantell Sans, sans-serif" font-weight="700" font-size="10" fill="#c792ff" textLength="50" lengthAdjust="spacingAndGlyphs">MANI/PEDI</text>
+  </symbol>
 </svg>
 
 <div class="app">
@@ -307,7 +321,7 @@ label { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform:
         <div>
           <p class="eyebrow">Nail appointments</p>
           <h1>Octo<span>ber</span> 2026</h1>
-          <p class="sub">Tap a day to stamp it. Tap a stamped day to clear it.</p>
+          <p class="sub">Tap a day once for booked, twice for mani/pedi only, three times to clear.</p>
         </div>
       </header>
 
@@ -333,6 +347,7 @@ label { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform:
 
       <div class="tally">
         <span class="chip"><b id="takenCount">0</b> taken</span>
+        <span class="chip"><b id="maniCount" class="mani">0</b> mani/pedi only</span>
         <span class="chip"><span id="openCount">0</span> open</span>
       </div>
 
@@ -362,7 +377,7 @@ label { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform:
         </svg>
         <div class="weekdays"><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div></div>
         <div class="grid" id="grid"></div>
-        <p class="hint">A paw stamp means that day is booked or unavailable. The white number shows how many clients you have that day.</p>
+        <p class="hint">Orange paw: booked or unavailable. Purple paw: manicures &amp; pedicures only. The white number shows how many clients you have that day.</p>
       </div>
     </section>
 
@@ -546,7 +561,8 @@ function firstData() {
 }
 let data = load("nail-data", null) || firstData();
 
-const isTaken = d => !!data.stamps[keyOf(d)]?.on;
+const kindOf = d => { const st = data.stamps[keyOf(d)]; return st?.on ? (st.kind || "taken") : null; };   // "taken", "mani" or null
+const isTaken = d => !!kindOf(d);
 const activeClients = () => Object.fromEntries(Object.entries(data.clients).filter(([, c]) => !c.deleted));
 
 let edits = 0;
@@ -556,7 +572,7 @@ function changed() {
   scheduleSync();
   return store("nail-data", data);
 }
-const setStamp = (d, on) => { data.stamps[keyOf(d)] = { on, t: Date.now() }; return changed(); };
+const setStamp = (d, on, kind = "taken") => { data.stamps[keyOf(d)] = on ? { on, kind, t: Date.now() } : { on, t: Date.now() }; return changed(); };
 const putClient = (id, c) => { data.clients[id] = { ...c, t: Date.now() }; return changed(); };
 const removeClient = id => { data.clients[id] = { deleted: true, t: Date.now() }; return changed(); };
 const touchAbout = () => { data.about.t = Date.now(); return changed(); };
@@ -767,18 +783,20 @@ function renderCalendar() {
   const counts = clientCount();
   let html = "<div></div>".repeat(weekday(workdays[0]) - 1);   // blank days
   for (const d of workdays) {
-    const cls = ["day", isTaken(d) && "taken", d === today && "today", isPast(d) && "past"].filter(Boolean).join(" ");
+    const kind = kindOf(d);
+    const cls = ["day", kind && "taken", kind === "mani" && "mani", d === today && "today", isPast(d) && "past"].filter(Boolean).join(" ");
     const tilt = (d * 37) % 24 - 12;                                 // stamp tilt
     html += `<button type="button" class="${cls}" data-day="${d}" aria-pressed="${isTaken(d)}">
       <span>${d}</span>
       ${counts[d] ? `<b class="count">${counts[d]}</b>` : ""}
-      ${isTaken(d) ? `<svg class="stamp" style="transform:rotate(${tilt}deg)" viewBox="0 0 100 100"><use href="#paw"/></svg>` : ""}
+      ${isTaken(d) ? `<svg class="stamp" style="transform:rotate(${tilt}deg)" viewBox="0 0 100 100"><use href="${kind === "mani" ? "#paw-mani" : "#paw"}"/></svg>` : ""}
     </button>`;
   }
   $("grid").innerHTML = html;
-  const n = workdays.filter(isTaken).length;
+  const n = workdays.filter(d => kindOf(d) === "taken").length, m = workdays.filter(d => kindOf(d) === "mani").length;
   $("takenCount").textContent = n;
-  $("openCount").textContent = workdays.length - n;
+  $("maniCount").textContent = m;
+  $("openCount").textContent = workdays.length - n - m;
   if (!$("tab-story").hidden) drawStory();         // keep story in step
 }
 
@@ -786,14 +804,16 @@ $("grid").addEventListener("click", e => {
   const btn = e.target.closest(".day");
   if (!btn) return;
   const d = Number(btn.dataset.day);
-  if (isTaken(d)) { setStamp(d, false); undoDay = d; message(`Cleared ${MONTH_NAME} ${d}`, true); }
-  else { setStamp(d, true); toast.hidden = true; }
+  const kind = kindOf(d);
+  if (!kind) { setStamp(d, true); toast.hidden = true; }
+  else if (kind === "taken") { setStamp(d, true, "mani"); message(`${MONTH_NAME} ${d}: mani/pedi only`); }
+  else { setStamp(d, false); undoDay = d; message(`Cleared ${MONTH_NAME} ${d}`, true); }
   renderCalendar();
 });
 
 $("undoBtn").addEventListener("click", () => {
   if (undoDay === null) return;
-  setStamp(undoDay, true);
+  setStamp(undoDay, true, "mani");
   undoDay = null;
   toast.hidden = true;
   renderCalendar();
@@ -1064,12 +1084,13 @@ function loadStoryArt() {
     svgImage("0 0 120 130", $("sheetcat").innerHTML),
     svgImage("0 0 100 100", document.querySelector(".blackcat").innerHTML),
     svgImage("0 0 100 100", $("paw").innerHTML),
+    svgImage("0 0 100 100", $("paw-mani").innerHTML),
     svgImage("0 0 120 170", document.querySelector(".sitghost").innerHTML),
     svgImage("0 0 150 130", document.querySelector(".cal .loafcat").innerHTML.replace(/<text[\s\S]*?<\/text>/g, "")),
     document.fonts.load("60px Griffy").catch(() => {}),
     document.fonts.load("700 20px 'Shantell Sans'").catch(() => {}),
     document.fonts.load("20px 'Shantell Sans'").catch(() => {})
-  ]).then(([ghost, cat, paw, sitGhost, loaf]) => ({ ghost, cat, paw, sitGhost, loaf }));
+  ]).then(([ghost, cat, paw, pawMani, sitGhost, loaf]) => ({ ghost, cat, paw, pawMani, sitGhost, loaf }));
   return storyArt;
 }
 
@@ -1139,7 +1160,11 @@ async function drawStory() {
 
   // Caption
   let y = writeRuns(ctx, [
-    { text: "Paw-stamped days are booked or unavailable.", font: `19px ${BODY}`, color: WHITE },
+    { text: "Orange paws ", font: `700 19px ${BODY}`, color: "#ff5a36" },
+    { text: "are booked or unavailable.", font: `19px ${BODY}`, color: WHITE },
+    { br: true },
+    { text: "Purple paws ", font: `700 19px ${BODY}`, color: "#c792ff" },
+    { text: "are manis & pedis only.", font: `19px ${BODY}`, color: WHITE },
     { br: true },
     { text: "DM to book!", font: `700 19px ${BODY}`, color: ORANGE }
   ], X, 252, 370, 27);
@@ -1203,23 +1228,25 @@ async function drawStory() {
 
   workdays.forEach((d, i) => {
     const slot = lead + i, cx = inX + (slot % 5) * (cellW + gap), cy = gridTop + Math.floor(slot / 5) * (cellH + gap);
-    const taken = isTaken(d);
+    const kind = kindOf(d), taken = !!kind;
+    const fill = kind === "mani" ? "#352850" : taken ? "#4a2a3a" : "#2c2340";
+    const pawImg = kind === "mani" ? art.pawMani : art.paw;
     ctx.globalAlpha = isPast(d) && !taken ? 0.4 : 1;          // past days fade
     roundRect(ctx, cx, cy, cellW, cellH, 12);
-    ctx.fillStyle = taken ? "#4a2a3a" : "#2c2340"; ctx.fill();
-    ctx.lineWidth = 1.5; ctx.strokeStyle = taken ? "#8a3d3d" : "#43365e"; ctx.stroke();
-    if (taken && art.paw) {                                     // paw stamp
+    ctx.fillStyle = fill; ctx.fill();
+    ctx.lineWidth = 1.5; ctx.strokeStyle = kind === "mani" ? "#7a5aa8" : taken ? "#8a3d3d" : "#43365e"; ctx.stroke();
+    if (taken && pawImg) {                                      // paw stamp
       const s = Math.min(cellH * 0.9, cellW * 0.66), tilt = ((d * 37) % 24 - 12) * Math.PI / 180;
       ctx.save();
       ctx.translate(cx + cellW - s / 2 - 3, cy + cellH - s / 2 - 3);
       ctx.rotate(tilt);
       ctx.globalAlpha = 0.92;
-      ctx.drawImage(art.paw, -s / 2, -s / 2, s, s);
+      ctx.drawImage(pawImg, -s / 2, -s / 2, s, s);
       ctx.restore();
     }
     ctx.font = `700 26px ${BODY}`;
     ctx.fillStyle = WHITE;
-    ctx.shadowColor = taken ? "#4a2a3a" : "#2c2340"; ctx.shadowBlur = 6;
+    ctx.shadowColor = fill; ctx.shadowBlur = 6;
     ctx.fillText(d, cx + 11, cy + 31);
     ctx.shadowBlur = 0;
     ctx.globalAlpha = 1;
